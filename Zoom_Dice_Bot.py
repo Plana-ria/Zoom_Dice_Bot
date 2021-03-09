@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import pyautogui as pg
 import time
 from time import sleep
+from playsound import playsound
 
 def main():
     #開始処理
@@ -75,21 +76,23 @@ def main():
             while True:
                 data = f.readline()
                 if int(log[0]) <= k:
-                    command = re.search(r'(\d{1,3})([d|D|ｄ|D]{1})(\d{1,3})([+|-|*|/|＋|ー|＊|/]{0,1})(\d{0,3})([d|D|ｄ|D]{0,1})(\d{0,3})', data)
+                    command = re.search(r'(\d{1,3})([d|D|ｄ|D|Ｄ]{1})(\d{1,3})([+|-|*|/|＋|ー|－|-|-|−|＊|×|✖|⋇|/|／]{0,1})(\d{0,3})([d|D|ｄ|D|Ｄ]{0,1})(\d{0,3})', data)
                     
                     if command != None:
                         #コマンド判定/コマンド処理
                         if command.group(6) != '':
                             item = sum(np.random.randint(1, int(command.group(7)) + 1, int(command.group(5))))
                         else:
-                            item = int(command.group(5))
+                            if command.group(5) != '':
+                                item = int(command.group(5))
                         if '+' in str(command) or '＋' in str(command):
                             res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1)))) + item
-                        elif '-' in str(command) or 'ー' in str(command):
+                        elif '-' in str(command) or 'ー' in str(command) or '－' in str(command) or '-' in str(command) or '-' in str(command) or '−' in str(command):
+
                             res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1)))) - item
-                        elif '*' in str(command) or '＊' in str(command):
+                        elif '*' in str(command) or '＊' in str(command) or '×' in str(command) or '✖' in str(command) or '⋇' in str(command):
                             res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1)))) * item
-                        elif '/' in str(command) or '/' in str(command):
+                        elif '/' in str(command) or '/' in str(command) or '／' in str(command):
                             res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1)))) / item
                         else:
                             res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1))))
@@ -100,6 +103,7 @@ def main():
                         sleep(0.5)
                         pg.write('> ')
                         pg.write(str(res))
+                        playsound("sound.wav")
                         pg.press('enter')
 
                 if data == '':
