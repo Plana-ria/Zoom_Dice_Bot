@@ -13,13 +13,13 @@ def main():
         log = f.readlines()
         f.close()
         if not log:
-            log = ['0\n', '0\n','0\n','0\n','0\n','0\n','0\n','0\n']
+            log = ['0\n', '0\n','0\n','0\n','0\n','0\n','0\n','0\n','0\n','0\n','0\n','0\n']
         f = open('log.txt', 'w', encoding='UTF-8')
         ans = input('Reset the count? (y or skip:enter)\n')
         if ans =='y' or ans == 'Y':
             log[0] = '0\n'
         ans = input('Setting chat file directory? (full file path or skip:enter)\n')
-        if ans != '\n':
+        if ans != '':
             log[1] = ans + '\n'
         ans = input('Change the click position? :y or n (enter)\n')
         if ans =='y' or ans == 'Y':
@@ -75,18 +75,22 @@ def main():
             while True:
                 data = f.readline()
                 if int(log[0]) <= k:
-                    command = re.search(r'(\d{0,3})([d|D|ｄ|D]{1})(\d{0,3})([+|-|*|/|＋|ー|＊|/]{0,1})(\d{0,3})', data)
+                    command = re.search(r'(\d{1,3})([d|D|ｄ|D]{1})(\d{1,3})([+|-|*|/|＋|ー|＊|/]{0,1})(\d{0,3})([d|D|ｄ|D]{0,1})(\d{0,3})', data)
                     
                     if command != None:
                         #コマンド判定/コマンド処理
+                        if command.group(6) != '':
+                            item = sum(np.random.randint(1, int(command.group(7)) + 1, int(command.group(5))))
+                        else:
+                            item = int(command.group(5))
                         if '+' in str(command) or '＋' in str(command):
-                            res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1)))) + int(command.group(5))
+                            res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1)))) + item
                         elif '-' in str(command) or 'ー' in str(command):
-                            res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1)))) - int(command.group(5))
+                            res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1)))) - item
                         elif '*' in str(command) or '＊' in str(command):
-                            res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1)))) * int(command.group(5))
+                            res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1)))) * item
                         elif '/' in str(command) or '/' in str(command):
-                            res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1)))) / int(command.group(5))
+                            res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1)))) / item
                         else:
                             res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1))))
 
