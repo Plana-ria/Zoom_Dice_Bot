@@ -70,21 +70,24 @@ def main():
             t = time.time() + 8
             #新規入力チャット読み込み
             k = 0
-            new_list = []
             f = open(log[1].replace('\n',''), 'r', encoding='UTF-8') #絶対パスでファイル指定
 
             while True:
                 data = f.readline()
                 if int(log[0]) <= k:
+                    parenthesis = re.search(r'\(', data)
                     command = re.search(r'(\d{1,3})([d|D|ｄ|D|Ｄ]{1})(\d{1,3})([+|-|*|/|＋|ー|－|-|-|−|＊|×|✖|⋇|/|／]{0,1})(\d{0,3})([d|D|ｄ|D|Ｄ]{0,1})(\d{0,3})', data)
-                    
-                    if command != None:
+                    user_name = re.search(r'開始 (.*?) に', data)
+
+                    if command != None and parenthesis == None:
                         #コマンド判定/コマンド処理
                         if command.group(6) != '':
                             item = sum(np.random.randint(1, int(command.group(7)) + 1, int(command.group(5))))
+                            com = command.group(1) + command.group(2) + command.group(3) + command.group(4) + command.group(5) + command.group(6) + command.group(7)
                         else:
                             if command.group(5) != '':
                                 item = int(command.group(5))
+                                com = command.group(1) + command.group(2) + command.group(3) + command.group(4) + command.group(5)
                         if '+' in str(command) or '＋' in str(command):
                             res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1)))) + item
                         elif '-' in str(command) or 'ー' in str(command) or '－' in str(command) or '-' in str(command) or '-' in str(command) or '−' in str(command):
@@ -96,12 +99,16 @@ def main():
                             res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1)))) / item
                         else:
                             res = sum(np.random.randint(1, int(command.group(3)) + 1, int(command.group(1))))
+                            com = command.group(1) + command.group(2) + command.group(3)
 
                         #チャットボックス入力
                         #print('> {0}'.format(res))
                         pg.click(int(log[6]), int(log[7])) #x=1100 y=668
                         sleep(0.5)
-                        pg.write('> ')
+                        pg.write(user_name.group(1))
+                        pg.write('(')
+                        pg.write(com)
+                        pg.write(')> ')
                         pg.write(str(res))
                         playsound("sound.wav")
                         pg.press('enter')
