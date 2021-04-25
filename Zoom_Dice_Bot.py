@@ -77,6 +77,20 @@ def main():
                 data = f.readline()
                 if int(log[0]) <= k:
                     parenthesis = re.search(r'\(', data)
+                    endcom = re.search(r'Botout', data)
+                    if endcom != None and parenthesis == None:
+                        f.close()
+                        pg.click(int(log[6]), int(log[7])) #x=1100 y=668
+                        sleep(0.5)
+                        pg.write('END')
+                        pg.press('enter')
+                        f = open('log.txt', 'w', encoding='UTF-8')
+                        k += 2
+                        log[0] = str(k) + '\n'
+                        f.writelines(log)
+                        f.close()
+                        print('Exit.') 
+                        return 0;
                     command = re.search(r'(\d{1,3})([d|D|ｄ|D|Ｄ]{1})(\d{1,3})([+|-|*|/|＋|ー|－|-|-|−|＊|×|✖|⋇|/|／]{0,1})(\d{0,3})([d|D|ｄ|D|Ｄ]{0,1})(\d{0,3})', data)
                     user_name = re.search(r'開始 (.*?) に', data)
 
