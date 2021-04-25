@@ -5,6 +5,7 @@ import pyautogui as pg
 import time
 from time import sleep
 from playsound import playsound
+import pyperclip as pc
 
 def main():
     #開始処理
@@ -105,7 +106,8 @@ def main():
                         #print('> {0}'.format(res))
                         pg.click(int(log[6]), int(log[7])) #x=1100 y=668
                         sleep(0.5)
-                        pg.write(user_name.group(1))
+                        pc.copy(user_name.group(1))
+                        pg.hotkey('ctrl', 'v')
                         pg.write('(')
                         pg.write(com)
                         pg.write(')> ')
